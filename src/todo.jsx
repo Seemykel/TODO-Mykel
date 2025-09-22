@@ -71,27 +71,24 @@ const TodoApp = () => {
         setTask(updatedTask);
     };
 
+    const handleDelete = (id) => {
+    const taskToDelete = task.find((t) => t.id === id);
+    setDeletedTasks([...deletedTasks, taskToDelete]);
+    const filteredTasks = task.filter((t) => t.id !== id);
+    setTask(filteredTasks);
+    setShowModal({
+        show: true,
+        type: 'delete',
+        content: 'Note has been deleted!'
+    });
+    };
+    
     const handleEdit = (id) => {
         const editItem = task.find((t) => t.id === id);
         setSingleTask(editItem.task);
         setShowTextArea(true);
         handleDelete(id); // optional, but consider instead updating directly
     };
-
-    const handleDelete = (id) => {
-        const taskToDelete = task.find((t) => t.id === id);
-        if (taskToDelete) {
-            setDeletedTasks([...deletedTasks, taskToDelete]);
-        }
-        
-        const filteredTasks = task.filter((task) => task.id !== id);
-        setTask(filteredTasks);
-        setShowModal({
-            show: true,
-            type: 'Delete',
-            content: 'A note has just been Deleted'
-        })
-    }
 
     if (load) {
         return <main className='loading-page'>
@@ -145,24 +142,6 @@ const TodoApp = () => {
                                         <li key={task.id}>
                                                 <span>{task.task}</span>
                                                 <span><button onClick={() => handleDelete(task.id)}><FaTrash /></button></span>
-                                        </li>
-                                    )
-                                })
-                            }
-                        </ul>
-                    </div>
-                    <div className='deleted-tasks'>
-                        <h2>Deleted Tasks</h2>
-                        <ul>
-                            {
-                                deletedTasks.map((deletedTask)=>{
-                                    return(
-                                        <li key={deletedTask.id}>
-                                            <span>{deletedTask.task}</span>
-                                            <span><button onClick={() => {
-                                                const filteredDeleted = deletedTasks.filter((t) => t.id !== deletedTask.id);
-                                                setDeletedTasks(filteredDeleted);
-                                            }}><FaTrash /></button></span>
                                         </li>
                                     )
                                 })
