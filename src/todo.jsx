@@ -16,10 +16,17 @@ const TodoApp = () => {
     })
     const [showTextArea, setShowTextArea] = useState(false);
 
-    const storedTasks = JSON.parse(localStorage.getItem('task'))
+    const getStoredTasks = () => {
+        try {
+            const saved = localStorage.getItem('task');
+            return saved ? JSON.parse(saved) : [];
+        } catch (err) {
+            return [];
+        }
+    };
 
     useEffect(()=>{
-        setTask(storedTasks)
+        setTask(getStoredTasks())
     }, [])
 
     useEffect(
@@ -82,7 +89,7 @@ const TodoApp = () => {
         content: 'Note has been deleted!'
     });
     };
-    
+
     const handleEdit = (id) => {
         const editItem = task.find((t) => t.id === id);
         setSingleTask(editItem.task);
